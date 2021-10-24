@@ -84,6 +84,6 @@ public class NoteServiceImpl implements NoteService {
             throw new UserNotAuthorizedException("You cannot edit other user note!");
         }
 
-        noteRepo.deleteById(noteId);
+        noteRepo.deleteNote(noteId);
     }
 }
