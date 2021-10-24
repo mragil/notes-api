@@ -47,15 +47,15 @@ public class NoteController {
     }
 
     @PutMapping("/notes/user/{userId}/note/{noteId}")
-    public ResponseEntity<Note> editNote(@PathVariable Long noteId,
+    public ResponseEntity<Note> editNote(@PathVariable Long userId, @PathVariable Long noteId,
             @RequestBody FormNote formNote) {
 
-        return ResponseEntity.ok().body(noteService.editNote(noteId, formNote));
+        return ResponseEntity.ok().body(noteService.editNote(userId, noteId, formNote));
     }
 
     @DeleteMapping("/notes/user/{userId}/note/{noteId}")
-    public void deleteNote(@PathVariable Long noteId) {
-        noteService.deleteNote(noteId);
+    public void deleteNote(@PathVariable Long userId, @PathVariable Long noteId) {
+        noteService.deleteNote(userId, noteId);
     }
 
 }
