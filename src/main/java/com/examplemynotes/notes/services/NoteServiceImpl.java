@@ -8,6 +8,7 @@ import com.examplemynotes.notes.models.Note;
 import com.examplemynotes.notes.models.User;
 import com.examplemynotes.notes.repositories.NoteRepo;
 import com.examplemynotes.notes.repositories.UserRepo;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
@@ -26,9 +27,9 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public List<Note> getUserNotes(Long userId) {
+    public List<Note> getUserNotes(Long userId, Pageable paging) {
 
-        return noteRepo.findByUser(userId);
+        return noteRepo.findByUser(userId, paging);
     }
 
     @Override
