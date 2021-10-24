@@ -14,8 +14,8 @@ public interface NoteService {
 
     Note saveNote(FormNote formNote);
 
-    Note editNote(Long id, FormNote formNote);
+    Note editNote(Long userId, Long noteId, FormNote formNote);
 
-    void deleteNote(Long id);
+    void deleteNote(Long userId, Long noteId);
 
 }

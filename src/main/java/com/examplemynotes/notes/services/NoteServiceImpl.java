@@ -3,6 +3,8 @@ package com.examplemynotes.notes.services;
 import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
+import com.examplemynotes.notes.exception.ResourceNotFoundException;
+import com.examplemynotes.notes.exception.UserNotAuthorizedException;
 import com.examplemynotes.notes.models.FormNote;
 import com.examplemynotes.notes.models.Note;
 import com.examplemynotes.notes.models.User;
@@ -48,15 +50,19 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public Note editNote(Long id, FormNote formNote) {
+    public Note editNote(Long userId, Long noteId, FormNote formNote) {
 
-        Optional<Note> note = noteRepo.findById(id);
+        Optional<Note> note = noteRepo.findById(noteId);
 
         if (!note.isPresent()) {
-            return null; // Note not found
+            throw new ResourceNotFoundException("Note with id : " + noteId + " Not Found!");
         }
 
         Note userNote = note.get();
+
+        if (!userNote.getUser().getId().equals(userId)) {
+            throw new UserNotAuthorizedException("You cannot edit other user note!");
+        }
 
         userNote.setTitle(formNote.getTitle());
         userNote.setDescription(formNote.getDescription());
@@ -65,12 +71,19 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public void deleteNote(Long id) {
-        Optional<Note> note = noteRepo.findById(id);
+    public void deleteNote(Long userId, Long noteId) {
+        Optional<Note> note = noteRepo.findById(noteId);
 
         if (!note.isPresent()) {
-            // Note not found
+            throw new ResourceNotFoundException("Note with id : " + noteId + "Not Found!");
         }
-        userRepo.deleteById(id);
+
+        Note userNote = note.get();
+
+        if (!userNote.getUser().getId().equals(userId)) {
+            throw new UserNotAuthorizedException("You cannot edit other user note!");
+        }
+
+        noteRepo.deleteById(noteId);
     }
 }
